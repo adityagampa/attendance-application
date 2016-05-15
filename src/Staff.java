@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -49,25 +50,30 @@ public class Staff extends HttpServlet {
 			stmt.setString(2, year);
 			ResultSet rs=stmt.executeQuery();
 			
-			out.println("<html> <body>");
-			out.println("<form action='UpdateAttendance' id='formid' method='post'> ");
-			out.println("<p form='formid' name='"+branch+"'> Branch :"+branch+"</p>");
-			out.println("<p form='formid' name='"+year+"'> Year :"+year+"</p>");
-			out.println("<p form='formid' name='starthour'> Start Hour :"+starthour+"</p>");
-			out.println("<input type='hidden' form='formid' name='starthour' value='"+starthour+"'>");
-			out.println("<p form='formid' name='numberofhours'> Number of Hours :"+numberofhours+"</p>");
-			out.println("<input type='hidden' form='formid' name='numberofhours' value='"+numberofhours+"'>");
-			out.println("<input type='hidden' form='formid' name='date' value='"+today+"'>");
+			RequestDispatcher rd=req.getRequestDispatcher("/sample.html");
+			rd.include(req, res);
+			out.println("<p  name='"+branch+"'> Branch :"+branch+"</p>");
+			out.println("</div> <div class='form-row'>");
+			out.println("<p  name='"+year+"'> Year :"+year+"</p>");
+			out.println("</div> <div class='form-row'>");
+			out.println("<p  name='starthour'> Start Hour :"+starthour+"</p>");
+			out.println("</div> <div class='form-row'>");
+			out.println("<input type='hidden' name='starthour' value='"+starthour+"'>");
+			out.println("<p  name='numberofhours'> Number of Hours :"+numberofhours+"</p>");
+			out.println("</div> <div class='form-row'>");
+			out.println("<input type='hidden'  name='numberofhours' value='"+numberofhours+"'>");
+			out.println("<input type='hidden'  name='date' value='"+today+"'>");
 			
 			
-			out.println("<h3> Check if present </h3>");
+			out.println("<h3> UnCheck if absent </h3>");
 			while(rs.next()) 
 			{
 				String roll=rs.getString(1);
-				out.println(roll+"<input type='checkbox' name='"+roll+"'>"+"<br>");
+				out.println("</div> <div class='form-row'>");
+				out.println(roll+"<input type='checkbox' name='"+roll+"' checked>"+"<br>");
 			}
 			out.println("<br><input type='submit' value='submit'> </form>");
-			out.println("</body> </html>");
+			out.println("</div> </form> </div> </body>");
 		}
 		catch(SQLException se){
       		se.printStackTrace();

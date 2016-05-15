@@ -31,6 +31,7 @@ public class UpdateAttendance extends HttpServlet {
 		
 		String today=req.getParameter("date");
 		int numberofhours=Integer.parseInt(req.getParameter("numberofhours"));
+		
 		String starthour=req.getParameter("starthour");
 
 		res.setContentType("text/html");
@@ -49,11 +50,11 @@ public class UpdateAttendance extends HttpServlet {
 				int conducted=rs.getInt(2);
 				int attended=rs.getInt(3);
 				double percent=rs.getDouble(4);
-				conducted+=2;
+				conducted+=numberofhours;
 				String check=req.getParameter(rollnumber);
 				if(check!=null)
 				{
-					attended+=2;
+					attended+=numberofhours;
 				}
 				percent=(attended*100.00)/conducted;
 				
@@ -67,50 +68,47 @@ public class UpdateAttendance extends HttpServlet {
 							
 //				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	//			String d=dateFormat.format(new Date());
-				if(rollnumber.equals("13733001"))
+				rollnumber="R"+rollnumber;
+				sql="select date from "+rollnumber+" where date=?";
+				stmt=conn.prepareStatement(sql);
+				stmt.setString(1, today);
+					
+				ResultSet rs1=stmt.executeQuery();
+				if(!rs1.next())
 				{
-					rollnumber="name"+rollnumber;
-					sql="select date from "+rollnumber+" where date=?";
+					sql="insert into "+rollnumber+" values( ? , 0 , 0 , 0 , 0 , 0, 0, 0 );";
 					stmt=conn.prepareStatement(sql);
 					stmt.setString(1, today);
-					
-					rs=stmt.executeQuery();
-					if(!rs.next())
+					int rows=stmt.executeUpdate();
+					if(rows!=1)
 					{
-						out.println("HAMAYA");
-						sql="insert into "+rollnumber+" values( ? , 0 , 0 , 0 , 0 , 0, 0, 0 );";
-						stmt=conn.prepareStatement(sql);
-						stmt.setString(1, today);
-						int rows=stmt.executeUpdate();
-						if(rows!=1)
-						{
-							out.println("Error updating attendance..! Sorry..! :(");
-						}
-
+						out.println("Error updating attendance..! Sorry..! :(");
 					}
-					String[] part = starthour.split("(?<=\\D)(?=\\d)");
-					String h=part[0];
-					int temp=Integer.parseInt(part[1]);
-
-					while(numberofhours>0)
+				}
+				String[] part = starthour.split("(?<=\\D)(?=\\d)");
+				String h=part[0];
+				int temp=Integer.parseInt(part[1]);
+				int a=numberofhours;
+				if(check!=null)
+				{
+					while(a>0)
 					{
 						sql="update "+rollnumber+" set "+h+temp+" =1 where date=?;";
 						temp++;
 						stmt=conn.prepareStatement(sql);
 						stmt.setString(1, today);
 						int rows=stmt.executeUpdate();
-						if(rows!=1)
+						if(rows<1)
 						{
 							out.println("Error updating attendance..! Sorry..! :(");
 						}
-
-						numberofhours--;
+						a--;
 					}
-					
 				}
 			}
 			RequestDispatcher rd=req.getRequestDispatcher("stafflogin.html");
 		    rd.include(req, res);
+		    out.println("<center><h4>Successfully updated attendance</h4></center>");
 		}
 		catch(SQLException se){
       		se.printStackTrace();

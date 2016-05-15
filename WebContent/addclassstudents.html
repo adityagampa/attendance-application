@@ -2,7 +2,6 @@
 <html>
 
 <head>
-
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,27 +10,47 @@
 
 </head>
 
-
-
     <ul>
-    <li>
-    <a href="" style="background-color: inherit"></a>
-    </li>
-    
-            <a href="LogoutServlet" style="float: right;"> Logout </a>
-    		<a href="IntermediateUpdateStaff" style="float: right;">Update Your Details</a>
-    
+        <li><a href="adminhomepage.html">Add Staff</a></li>
+        <li><a href="addonestudent.html">Add a Student</a></li>
+        <li><a href="addclassstudents.html" class="active">Add class of Students</a></li>
+        <li><a href="updatestudent.html">Update Student</a></li>
+       
+        <a href="AdminLogoutServlet" style="float: right;"> Logout </a> 
     </ul>
+
+
     <div class="main-content">
 
 
+        <form class="form-basic" method="post" action="AddClassOfStudents">
 
-        <form class="form-basic" action="Staff" method="POST" >
-		
             <div class="form-title-row">
-                <h1>Attendance Updation</h1>
+                <h1>Add class of Students</h1>
             </div>
 
+
+            <div class="form-row">
+                <label>
+                    <span>Start Roll Number</span>
+                    <input type="text" name="startrollnumber" placeholder="13733124">
+                </label>
+
+			</div>
+            <div class="form-row">
+                <label>
+                    <span>End Roll Number</span>
+                    <input type="text" name="endrollnumber" placeholder="13733184">
+                </label>
+			</div>			
+
+            <div class="form-row">
+                <label>
+                    <span>Number of Students</span>
+                    <input type="number" name="numberofstudents" placeholder="60">
+                </label>
+			</div>			
+			
 			<div class="form-row">
                 <label>
                     <span>Branch</span>
@@ -49,31 +68,10 @@
                 </label>
 
             </div>
-
+			
+			Note: default username and password are their respective rollnumber's
             <div class="form-row">
-                <label>
-                    <span>Number of hours</span>
-                    <input type="number" placeholder="Ex : 1/2" name="numberofhours" value="2">
-                </label>
-            </div>
-
-            <div class="form-row">
-                <label>
-                    <span>Start Period</span>
-                    <input type="text" placeholder="Ex: h1/h2" name="starthour" >
-                </label>
-            </div>
-
-			<div class="form-row">
-                <label>
-                    <span>Date for which attendance to be marked</span>
-                    <input type='date' name='date' placeholder='yyyy-mm-dd' >
-                </label>
-            </div>
-
-
-            <div class="form-row">
-                <input type="submit" value="submit"/>
+                <input type="submit" value="Add Student"/>
             </div>
 
         </form>

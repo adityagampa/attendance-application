@@ -18,32 +18,30 @@ public class LoginServlet extends HttpServlet
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/attendance","root","1490");
 
-		String sql="select username,password from staff;";
-		Statement stmt=conn.createStatement();
+		String sql="select password from staff where username=?;";
+		PreparedStatement stmt=conn.prepareStatement(sql);
+		stmt.setString(1, n);
 		
-		ResultSet rs=stmt.executeQuery(sql);
+		ResultSet rs=stmt.executeQuery();
 		
-		while(rs.next())
+		if(rs.next())
 		{
-			String a=rs.getString("username");
 			String b=rs.getString("password");
-			if((a.equals(n))&&(b.equals(p)))
+			if(b.equals(p))
 			{
-				out.println("welcome");
 				flag=1;
-				break;
+				HttpSession hs=req.getSession(true);
+				hs.setAttribute("username",n);
+				hs.setMaxInactiveInterval(10*60);
+				RequestDispatcher rd=req.getRequestDispatcher("/stafflogin.html");
+			    rd.include(req, res);
 			}
 		}
-		if(flag==1)
-		{
-			RequestDispatcher rd=req.getRequestDispatcher("/stafflogin.html");
-		    rd.include(req, res);
-		}
-		else if(flag==0)
+		if(flag==0)
 		{
 
 				out.println("sorry enter correct details");
-				RequestDispatcher rd=req.getRequestDispatcher("/index.html");
+				RequestDispatcher rd=req.getRequestDispatcher("/login.html");
 			    rd.include(req, res);
 		}
 
